@@ -58,13 +58,13 @@ ctrl + F5 で実行後、マス目のあるウィンドウがでてきます。
 
 ルールの項目が
 
-~~~//#define RULE_S_3_4_6_B_6      
-#define RULE_S_4_6_B_6           
-//#define RULE_S_4_6_B_4_6          
-//#define RULE_S_3_4_6_B_3_4_6 
-//#define RULE_S_4_B_3_4_6 
-//#define RULE_S_3_4_6_B_4
-//#define RULE_S_6_B_6~~~
+~~~//#define RULE_S_3_4_6_B_6~~~    
+~~~#define RULE_S_4_6_B_6~~~          
+~~~//#define RULE_S_4_6_B_4_6~~~         
+~~~//#define RULE_S_3_4_6_B_3_4_6~~~
+~~~//#define RULE_S_4_B_3_4_6~~~
+~~~//#define RULE_S_3_4_6_B_4~~~
+~~~//#define RULE_S_6_B_6~~~
 
 となっています。七個のルールから一つだけコメントアウトを外し設定を有効にします。
 
