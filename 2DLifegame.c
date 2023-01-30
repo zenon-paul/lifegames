@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include<limits.h>
 #include<stdlib.h>
-#include"user.h"
+#include"２DLifegameHeader.h"
 int window_w = 640;
 int window_h = 640;
 int points[max_point][2];
