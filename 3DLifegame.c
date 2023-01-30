@@ -21,7 +21,7 @@ int cube_vertex[8][3]={
 int gene = 0;
 double angle = 0;
 int exist_checker = 0;
-void poo(unsigned int x[32][32]) {
+void log(unsigned int x[32][32]) {
 	if (exist_checker) {
 		printf("%d\n", gene);
 		for (int j = SEND; j < SEND + HIGHT; j++) {
@@ -57,7 +57,7 @@ void init_bit() {
 		}
 	}
 //-------------------------------------------------------------------------------|
-	poo(bord1);
+	log(bord1);
 }
 void check() {
 	unsigned int ucc;
@@ -450,11 +450,11 @@ void check() {
 
 	if (gene % 2)
 	{
-		poo(bord2);
+		log(bord2);
 	}
 	else
 	{
-		poo(bord1);
+		log(bord1);
 	}
 }
 //-------------------------------出力用---------------------------------------------------------------------------------------------------
