@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
-#include"３DLifegameHeader.h"
+#include"user.h"
 int window_w = 640;
 int window_h = 640;
 unsigned int bord1[32][32] = { 0 };
@@ -21,6 +21,8 @@ int cube_vertex[8][3]={
 int gene = 0;
 double angle = 0;
 int exist_checker = 0;
+int rule[7] = { 0 };
+int initial[4] = { 0 };
 void log(unsigned int x[32][32]) {
 	if (exist_checker) {
 		printf("%d\n", gene);
@@ -34,14 +36,146 @@ void log(unsigned int x[32][32]) {
 			printf("----------------------------\n");
 		}
 	}
+/*
+	printf("%d---------------------------\n",gene);
+	for (int j = 0; j < 32; j++) {
+		printf("%d層目\n",j);
+		for (int i = 0; i < 32; i++) {
+			for (int k = 0; k < 32; k++) {
+				printf("%d", (x[i][j] >> (31 - k)) & 1);
+			}
+			printf("\n");
+		}
+		printf("----------------------------\n");
+	}
+*/
 }
 void init_bit() {
-//------------------------初期配置---------------------------------------------------------------|
-//                      [初期配置をヘッダーファイルからここにコピペ]
-//-----------------------------------------------------------------------------------------------|
+//------------------------初期配置をここにコピペ---------------------------------|
+	if (initial[0] > 0) {
+		srand((unsigned int)time(NULL));
+		int mask = (1 << (SEND + WIDTH - 2)) - 1;
+		mask ^= (1 << (SEND + 2)) - 1;
+		for (int j = SEND + 2; j < SEND + HIGHT - 2; j++) {
+			for (int i = SEND + 2; i < SEND + VERTICAL - 2; i++) {
+				bord1[i][j] = rand();
+				bord1[i][j] |= rand() << 15;
+				bord1[i][j] &= mask;
+			}
+		}
+	}
+	else if (initial[1] > 0) {
+		for (int j = SEND + 6; j < SEND + HIGHT - 2; j++) {
+			for (int i = SEND + 4; i < SEND + VERTICAL - 4; i++) {
+				for (int k = SEND + 4; k < SEND + WIDTH - 4; k++) {
+					if ((j % 2) != 0) {
+						bord1[i][j] |= (1 << (31 - k));
+					}
+				}
+			}
+		}
+
+		for (int j = SEND + 6; j < SEND + HIGHT - 2; j++) {
+			for (int i = SEND + 5; i < SEND + VERTICAL - 5; i++) {
+				for (int k = SEND + 5; k < SEND + WIDTH - 5; k++) {
+					if ((j % 2) != 0) {
+						bord1[i][j] ^= (1 << (31 - k));
+					}
+				}
+			}
+		}
+	}
+	else if (initial[2] > 0) {
+		for (int j = SEND; j < SEND + HIGHT; j++) {
+			for (int i = SEND; i < SEND + VERTICAL; i++) {
+				for (int k = SEND; k < SEND + WIDTH; k++) {
+					if ((j % 2) != 0) {
+						bord1[i][j] |= (1 << (31 - k));
+					}
+				}
+			}
+		}
+	}
+	else {
+		for (int k = SEND + 1; k < SEND + WIDTH - 1; k++) {
+			bord1[12][12] |= (1 << (31 - k));
+			bord1[19][19] |= (1 << (31 - k));
+			bord1[12][19] |= (1 << (31 - k));
+			bord1[19][12] |= (1 << (31 - k));
+		}
+		for (int j = SEND + 1; j < SEND + HIGHT - 1; j++) {
+			bord1[12][j] |= (1 << (12));
+			bord1[19][j] |= (1 << (12));
+			bord1[12][j] |= (1 << (19));
+			bord1[19][j] |= (1 << (19));
+		}
+		for (int i = SEND + 1; i < SEND + VERTICAL - 1; i++) {
+			bord1[i][12] |= (1 << (12));
+			bord1[i][19] |= (1 << (12));
+			bord1[i][12] |= (1 << (19));
+			bord1[i][19] |= (1 << (19));
+		}
+
+		for (int k = SEND; k < SEND + WIDTH; k++) {
+			bord1[11][11] |= (1 << (31 - k));
+			bord1[20][20] |= (1 << (31 - k));
+			bord1[11][20] |= (1 << (31 - k));
+			bord1[20][11] |= (1 << (31 - k));
+		}
+		for (int j = SEND; j < SEND + HIGHT; j++) {
+			bord1[11][j] |= (1 << (11));
+			bord1[20][j] |= (1 << (11));
+			bord1[11][j] |= (1 << (20));
+			bord1[20][j] |= (1 << (20));
+		}
+		for (int i = SEND; i < SEND + VERTICAL; i++) {
+			bord1[i][11] |= (1 << (11));
+			bord1[i][20] |= (1 << (11));
+			bord1[i][11] |= (1 << (20));
+			bord1[i][20] |= (1 << (20));
+		}
+
+		for (int k = SEND + 2; k < SEND + WIDTH - 2; k++) {
+			bord1[13][13] |= (1 << (31 - k));
+			bord1[18][18] |= (1 << (31 - k));
+			bord1[13][18] |= (1 << (31 - k));
+			bord1[18][13] |= (1 << (31 - k));
+		}
+		for (int j = SEND + 2; j < SEND + HIGHT - 2; j++) {
+			bord1[13][j] |= (1 << (13));
+			bord1[18][j] |= (1 << (13));
+			bord1[13][j] |= (1 << (18));
+			bord1[18][j] |= (1 << (18));
+		}
+		for (int i = SEND + 2; i < SEND + VERTICAL - 2; i++) {
+			bord1[i][13] |= (1 << (13));
+			bord1[i][18] |= (1 << (13));
+			bord1[i][13] |= (1 << (18));
+			bord1[i][18] |= (1 << (18));
+		}
+
+		for (int k = SEND + 3; k < SEND + WIDTH - 3; k++) {
+			bord1[14][14] |= (1 << (31 - k));
+			bord1[17][17] |= (1 << (31 - k));
+			bord1[14][17] |= (1 << (31 - k));
+			bord1[17][14] |= (1 << (31 - k));
+		}
+		for (int j = SEND + 3; j < SEND + HIGHT - 3; j++) {
+			bord1[14][j] |= (1 << (14));
+			bord1[17][j] |= (1 << (14));
+			bord1[14][j] |= (1 << (17));
+			bord1[17][j] |= (1 << (17));
+		}
+		for (int i = SEND + 3; i < SEND + VERTICAL - 3; i++) {
+			bord1[i][14] |= (1 << (14));
+			bord1[i][17] |= (1 << (14));
+			bord1[i][14] |= (1 << (17));
+			bord1[i][17] |= (1 << (17));
+		}
+	}
+//-------------------------------------------------------------------------------|
 	log(bord1);
 }
-//----------------------------------------演算処理の部分----------------------------------------------------------------------------------
 void check() {
 	unsigned int ucc;
 	unsigned int ucw;
@@ -363,70 +497,77 @@ void check() {
 			ts6 |= (us3 & cs1 & ds2);
 			ts6 |= (us3 & cs2 & ds1);
 			ts6 |= (us2 & cs2 & ds2);
-#ifdef RULE_S_4_6_B_6 
-			if (gene%2) {
-				bord2[i][j] = (~ccc & ts6) | (ccc & (ts4 | ts6));
-				exist_checker |= bord2[i][j];
+			if (rule[1] == 1) {//1
+				if (gene % 2) {
+					bord2[i][j] = (~ccc & ts6) | (ccc & (ts4 | ts6));
+					exist_checker |= bord2[i][j];
+				}
+				else {
+					bord1[i][j] = (~ccc & ts6) | (ccc & (ts4 | ts6));
+					exist_checker |= bord1[i][j];
+				}
+
 			}
-			else {
-			    bord1[i][j] = (~ccc & ts6) | (ccc & (ts4 | ts6));
-				exist_checker |= bord1[i][j];
+			else if (rule[0] == 1) {//0
+				if (gene % 2) {
+					bord2[i][j] = (~ccc & ts6) | (ccc & (ts3 | ts4 | ts6));
+					exist_checker |= bord2[i][j];
+				}
+				else {
+					bord1[i][j] = (~ccc & ts6) | (ccc & (ts3 | ts4 | ts6));
+					exist_checker |= bord1[i][j];
+				}
 			}
-#elif defined(RULE_S_3_4_6_B_6 )
-			if (gene % 2) {
-				bord2[i][j] = (~ccc & ts6) | (ccc & (ts3 | ts4 | ts6));
-				exist_checker |= bord2[i][j];
+			else if (rule[2] == 1) {//2
+				if (gene % 2) {
+					bord2[i][j] = (~ccc & (ts4 | ts6)) | (ccc & (ts4 | ts6));
+					exist_checker |= bord2[i][j];
+				}
+				else {
+					bord1[i][j] = (~ccc & (ts4 | ts6)) | (ccc & (ts4 | ts6));
+					exist_checker |= bord1[i][j];
+				}
 			}
-			else {
-				bord1[i][j] = (~ccc & ts6) | (ccc & (ts3 | ts4 | ts6));
-				exist_checker |= bord1[i][j];
+			else if (rule[3] == 1) {//3
+				if (gene % 2) {
+					bord2[i][j] = (~ccc & (ts3 | ts4 | ts6)) | (ccc & (ts3 | ts4 | ts6));
+					exist_checker |= bord2[i][j];
+				}
+				else {
+					bord1[i][j] = (~ccc & (ts3 | ts4 | ts6)) | (ccc & (ts3 | ts4 | ts6));
+					exist_checker |= bord1[i][j];
+				}
 			}
-#elif defined(RULE_S_4_6_B_4_6 )
-			if (gene % 2) {
-				bord2[i][j] = (~ccc & (ts4 | ts6)) | (ccc & (ts4 | ts6));
-				exist_checker |= bord2[i][j];
+			else if (rule[4] == 1) {//4
+				if (gene % 2) {
+					bord2[i][j] = (~ccc & (ts3 | ts4 | ts6)) | (ccc & (ts4));
+					exist_checker |= bord2[i][j];
+				}
+				else {
+					bord1[i][j] = (~ccc & (ts3 | ts4 | ts6)) | (ccc & (ts4));
+					exist_checker |= bord1[i][j];
+				}
 			}
-			else {
-				bord1[i][j] = (~ccc & (ts4 | ts6)) | (ccc & (ts4 | ts6));
-				exist_checker |= bord1[i][j];
+			else if (rule[5] == 1) {//5
+				if (gene % 2) {
+					bord2[i][j] = (~ccc & ts4) | (ccc & (ts3 | ts4 | ts6));
+					exist_checker |= bord2[i][j];
+				}
+				else {
+					bord1[i][j] = (~ccc & ts4) | (ccc & (ts3 | ts4 | ts6));
+					exist_checker |= bord1[i][j];
+				}
 			}
-#elif defined(RULE_S_3_4_6_B_3_4_6 )
-			if (gene % 2) {
-				bord2[i][j] = (~ccc & (ts3 | ts4 | ts6)) | (ccc & (ts3 | ts4 | ts6));
-				exist_checker |= bord2[i][j];
+            else{//6
+				if (gene % 2) {
+					bord2[i][j] = (~ccc & ts6) | (ccc & ts6);
+					exist_checker |= bord2[i][j];
+				}
+				else {
+					bord1[i][j] = (~ccc & ts6) | (ccc & ts6);
+					exist_checker |= bord1[i][j];
+				}
 			}
-			else {
-				bord1[i][j] = (~ccc & (ts3 | ts4 | ts6)) | (ccc & (ts3 | ts4 | ts6));
-				exist_checker |= bord1[i][j];
-			}
-#elif defined( RULE_S_4_B_3_4_6  )
-			if (gene % 2) {
-				bord2[i][j] = (~ccc & (ts3 | ts4 | ts6)) | (ccc & (ts4));
-				exist_checker |= bord2[i][j];
-			}
-			else {
-				bord1[i][j] = (~ccc & (ts3 | ts4 | ts6)) | (ccc & (ts4));
-				exist_checker |= bord1[i][j];
-			}
-#elif defined( RULE_S_3_4_6_B_4  )
-			if (gene % 2) {
-				bord2[i][j] = (~ccc & ts4) | (ccc & (ts3 | ts4 | ts6));
-				exist_checker |= bord2[i][j];
-			}
-			else {
-				bord1[i][j] = (~ccc & ts4) | (ccc & (ts3 | ts4 | ts6));
-				exist_checker |= bord1[i][j];
-			}
-#else
-			if (gene % 2) {
-				bord2[i][j] = (~ccc & ts6) | (ccc & ts6);
-				exist_checker |= bord2[i][j];
-			}
-			else {
-				bord1[i][j] = (~ccc & ts6) | (ccc & ts6);
-				exist_checker |= bord1[i][j];
-			}
-#endif
 
 		}
 	}
@@ -440,7 +581,6 @@ void check() {
 		log(bord1);
 	}
 }
-//-------------------------------出力部分---------------------------------------------------------------------------------------------------
 void cube() {
 	glColor3d(1.0, 1.0, 1.0);
 	glBegin(GL_QUADS);
@@ -539,6 +679,7 @@ void cube() {
 	glEnd();
 	glFlush();
 }
+//---------------------------------------------------------
 void Init() {
 	glClearColor(0.68, 0.129, 0.058, 1.0);
 }
@@ -623,7 +764,7 @@ void display() {
 	frame();
 
 
-	if ((gene > 0)&&((GENE+1)>=gene)) {
+	if (gene > 0) {
 		check();
 		cube();
 		exist_checker = 0;
@@ -665,7 +806,6 @@ void mouse(int button,int state,int x,int y) {
 	}
 }
 int main(int argc, char** argv) {
-	init_bit();
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE|GLUT_DEPTH);
 	glutInitWindowSize(window_w, window_h);
@@ -675,5 +815,34 @@ int main(int argc, char** argv) {
 	glutMouseFunc(mouse);
 	glutIdleFunc(idle);
 	Init();
+	int r = -1;
+	for (int i = 0; i < 7;i++) {
+		rule[i] = 0;
+	}
+	for (int i = 0; i < 4;i++) {
+		initial[i] = 0;
+	}
+	printf("please select simulation rule from 0 to 6\n");
+	printf("(survive: 3 4 6 birth:6) --->0\n(survive: 4 6 birtn: 6) --->1\n(survive: 4 6 birth: 4 6) --->2\n");
+	printf("(survive: 3 4 6 birth: 3 4 6)--->3\n(survive: 4 birth: 3 4 6)--->4\n(survive: 3 4 6 birth: 4)--->5\n(survive: 6 birth: 6)--->6\n");
+	while ((r<0)||(6<r)) {
+		scanf_s("%d", &r);
+		if ((r < 0) || (6 < r)) {
+			printf("invalid\n");
+		}
+	}
+	rule[r] = 1;
+	r = -1;
+	printf("please select initial state from 0 to 3\n");
+	while ((r < 0) || (3 < r)) {
+		scanf_s("%d", &r);
+		printf("(%d)\n",r);
+		if ((r < 0) || (3 < r)) {
+			printf("invalid\n");
+		}
+	}
+	initial[r] = 1;
+	init_bit();
+	
 	glutMainLoop();
 }
