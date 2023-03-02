@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
-#include"user.h"
+#include"3DLifegameHeader.h"
 int window_w = 640;
 int window_h = 640;
 unsigned int bord1[32][32] = { 0 };
