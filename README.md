@@ -1,79 +1,27 @@
-# lifegames
-# 2DLifegame
-ライフゲームで遊べます。
+# 2D/3D lifegame
+This tool enables you to play 2D/3D lifegame.
 
-＊[ライフゲーム](https://ja.wikipedia.org/wiki/%E3%83%A9%E3%82%A4%E3%83%95%E3%82%B2%E3%83%BC%E3%83%A0)とは
+＊[What is lifegame?](https://ja.wikipedia.org/wiki/%E3%83%A9%E3%82%A4%E3%83%95%E3%82%B2%E3%83%BC%E3%83%A0)
 ## Demo
-[動画](https://user-images.githubusercontent.com/123747386/215334780-d11927a9-dbad-49df-8eb8-4b1d3922b02f.gif)はこちら
+[movie](https://user-images.githubusercontent.com/123747386/215334780-d11927a9-dbad-49df-8eb8-4b1d3922b02f.gif)
 
-## Requirement
-### 2DLifegameで遊ぶために必要なこと
+## Description
+This is a tool that achieves highspeed processing by implementing it on a bit bord.
+### Requirement
+You need "Visual Studio 2019" to use this tool.
+If you already hane it, please follow the steps below.
 
-* 手順1.visual studio にて空のプロジェクトを作成し、ソースコードとヘッダーファイルを追加してください。
+*step 1 
 
-この時ヘッダーファイルは2DLifegameHeader.hという名前で追加してください。
+*step 2
 
-* 手順2.プロジェクト(p) からNuGetパッケージの管理(N)をクリックします。
-
-* 手順3.参照となっているところをクリックし、検索にnupenglと入力。
-
-* 手順4.nupengl.coreをクリックしインストール。
-
-* 手順5.次にglmと検索をかけオレンジ色のアイコンのglmをインストール。
-
-* 手順6.ソースコードには２DLifegame.cの、ヘッダーファイルには2DLifegameHeader.hの内容をそのままコピーしてください。
+*step 3
 
 ## Usage
 
-ctrl + F5 で実行後、マス目のあるウィンドウがでてきます。
-### 初期設定
-
-この時初期配置モードになっているため左クリックでセルの初期配置を決定できます。
-
-またすでにセルの存在するマスを左クリックすると、そのマス内のセルを消すことが出来ます。
-
-### シミュレーション開始
-
-右クリックでシミュレーションを開始することが出来ます。
 
 ## Note
 
 縦横64マスのフィールドの周囲一マスは、実装の都合上強制的に死となるマスになっています。
-
-## Features
-
-ライフゲームの演算部分からif分を排除することで高速化を試みました。
-
-# 3DLifegame
-
-ライフゲームの３次元への拡張版です。
-
-## Requirement
-
-2DLifegameの時と全くおなじです。
-
-## Usage
-
-まず、ヘッダーファイルをみます。
-
-### 初期配置とルールの設定
-
-ルールの項目が現在
-
-```
-//#define RULE_S_3_4_6_B_6  
-//#define RULE_S_4_6_B_6        
-//#define RULE_S_4_6_B_4_6         
-//#define RULE_S_3_4_6_B_3_4_6
-#define RULE_S_4_B_3_4_6
-//#define RULE_S_3_4_6_B_4
-//#define RULE_S_6_B_6
-```
-
-となっていると思います。七個のルールから一つだけコメントアウトを外し設定を有効にします。
-
-上の例では*生存*のために周囲26マス中生存セルが3か4か6マス必要であり、
-
-*誕生*のために周囲26マス中生存セルが6マス必要であることを示しています。
 
 
