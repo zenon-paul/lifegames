@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include<limits.h>
 #include<stdlib.h>
-#include"２DLifegameHeader.h"
+#include"user.h"
 int window_w = 640;
 int window_h = 640;
 int points[max_point][2];
@@ -22,12 +22,13 @@ printf("----------------------------------------\n");
 		{
 			for (int j = 0; j < 64; j++)
 			{
-				printf("%llu", (x[i] >> j) & 1);
+				printf("%lld", (x[i] >> j) & 1);
 			}
 			printf("\n");
 		}
 }
 void check() {
+	printf("check!\n");
 	bord1[0] = 0;
 	bord1[63] = 0;
 	bord2[0] = 0;
@@ -172,6 +173,36 @@ void dot() {
 	glEnd();
 	glFlush();
 }
+void lines() {
+	glColor3d(0.85,0.3,0.3);
+	glBegin(GL_QUADS);
+	for (int i = 0; i < 64; i++) {
+		glVertex2i(i*10,0);
+		glVertex2i(i*10,10);
+		glVertex2i(i*10+10,10);
+		glVertex2i(i*10+10,0);
+	}
+	for (int i = 0; i < 64; i++) {
+		glVertex2i(0, i * 10);
+		glVertex2i(10, i * 10);
+		glVertex2i(10, i * 10 + 10);
+		glVertex2i(0, i * 10 + 10);
+	}
+	for (int i = 0; i < 64; i++) {
+		glVertex2i(630, i * 10);
+		glVertex2i(640, i * 10);
+		glVertex2i(640, i * 10 + 10);
+		glVertex2i(630, i * 10 + 10);
+	}
+	for (int i = 0; i < 64; i++) {
+		glVertex2i(i * 10, 630);
+		glVertex2i(i * 10, 640);
+		glVertex2i(i * 10 + 10, 640);
+		glVertex2i(i * 10 + 10, 630);
+	}
+	glEnd();
+	glFlush();
+}
 void frame() {
 	glColor3d(0.0, 0.125, 0.22);
 	glBegin(GL_LINES);
@@ -198,6 +229,8 @@ void Init() {
 }
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	lines();
 
 	if ((GENE >= gene) && (gene > 0)) {
 		check();
@@ -248,6 +281,7 @@ int main(int argc,char** argv) {
 	glutInit(&argc,argv);
 	glutInitDisplayMode(GLUT_DOUBLE);
 	glutInitWindowSize(window_w,window_h);
+	glutInitWindowPosition(400,100);
 	glutCreateWindow("test");
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
