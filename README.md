@@ -11,8 +11,9 @@ This is a tool that achieves highspeed processing by implementing it on a bit bo
 You need "Visual Studio 2019" to use this tool.
 If you already hane it, please follow the steps below.
 
-*step 1 
+*step 1 download these four files.
 
+*step 2 
 ### if you will play 2D lifegame
 
 
