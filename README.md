@@ -7,21 +7,23 @@ This tool enables you to play 2D/3D lifegame.
 
 ## Description
 This is a tool that achieves highspeed processing by implementing it on a bit bord.
-### Requirement
+## Requirement
 You need "Visual Studio 2019" to use this tool.
 If you already hane it, please follow the steps below.
 
 *step 1 
 
-*step 2
+### if you will play 2D lifegame
 
-*step 3
+
+
+### if you will play 2D lifegame
 
 ## Usage
 
 
 ## Note
 
-縦横64マスのフィールドの周囲一マスは、実装の都合上強制的に死となるマスになっています。
+
 
 
